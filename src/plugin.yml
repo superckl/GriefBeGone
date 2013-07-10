@@ -1,0 +1,7 @@
+name: GriefBeGone
+main: me.superckl.griefbegone.GriefBeGone
+version: 4.0
+author: superckl
+commands:
+  GriefBeGone:
+    description: Type "/GriefBeGone help" for a list of commands
