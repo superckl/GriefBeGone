@@ -3,10 +3,10 @@ package me.superckl.griefbegone.listeners;
 import me.superckl.griefbegone.ActionHandler;
 import me.superckl.griefbegone.GriefBeGone;
 import me.superckl.griefbegone.MiscActionHandler;
-import me.superckl.griefbegone.events.blocks.GriefBeGoneBlockBlockBreakEvent;
-import me.superckl.griefbegone.events.blocks.GriefBeGoneBlockBlockPlaceEvent;
-import me.superckl.griefbegone.events.blocks.GriefBeGoneBlockFireIgniteEvent;
-import me.superckl.griefbegone.events.blocks.GriefBeGoneBlockFireSpreadEvent;
+import me.superckl.griefbegone.events.blocks.BlockBlockBreakEvent;
+import me.superckl.griefbegone.events.blocks.BlockBlockPlaceEvent;
+import me.superckl.griefbegone.events.blocks.BlockFireIgniteEvent;
+import me.superckl.griefbegone.events.blocks.BlockFireSpreadEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -31,7 +31,7 @@ public class BlockListeners implements Listener{
 		boolean[] boolArray = ActionHandler.PLACE.shouldBlockAndDelete(e.getPlayer(), e.getItemInHand());
 		if(boolArray[0]){
 			if(this.events){
-				GriefBeGoneBlockBlockPlaceEvent event = new GriefBeGoneBlockBlockPlaceEvent(boolArray[1], e.getBlockPlaced(), e.getBlockAgainst(), e.getPlayer());
+				BlockBlockPlaceEvent event = new BlockBlockPlaceEvent(boolArray[1], e.getBlockPlaced(), e.getBlockAgainst(), e.getPlayer());
 				Bukkit.getPluginManager().callEvent(event);
 				if(event.willBlock()){
 					e.setCancelled(true);
@@ -51,7 +51,7 @@ public class BlockListeners implements Listener{
 		boolean[] boolArray = ActionHandler.BREAK.shouldBlockAndDelete(e.getPlayer(), new ItemStack(e.getBlock().getTypeId()));
 		if(boolArray[0]){
 			if(this.events){
-				GriefBeGoneBlockBlockBreakEvent event = new GriefBeGoneBlockBlockBreakEvent(boolArray[1], e.getBlock(), e.getPlayer(), e.getExpToDrop());
+				BlockBlockBreakEvent event = new BlockBlockBreakEvent(boolArray[1], e.getBlock(), e.getPlayer(), e.getExpToDrop());
 				Bukkit.getPluginManager().callEvent(event);
 				if(event.willBlock()){
 					e.setCancelled(true);
@@ -70,7 +70,7 @@ public class BlockListeners implements Listener{
 		if(e.getCause() == IgniteCause.SPREAD){
 			if(MiscActionHandler.FIRE_SPREAD.getWorlds().contains(e.getBlock().getWorld().getName())){
 				if(this.events){
-					GriefBeGoneBlockFireSpreadEvent event = new GriefBeGoneBlockFireSpreadEvent(e.getBlock());
+					BlockFireSpreadEvent event = new BlockFireSpreadEvent(e.getBlock());
 					Bukkit.getPluginManager().callEvent(event);
 					if(event.willBlock())
 						e.setCancelled(true);
@@ -83,7 +83,7 @@ public class BlockListeners implements Listener{
 				block = MiscActionHandler.shouldBlockFirePlace(e.getPlayer(), e.getPlayer().getWorld());
 			if(block){
 				if(this.events){
-					GriefBeGoneBlockFireIgniteEvent event = new GriefBeGoneBlockFireIgniteEvent(e.getBlock(), e.getIgnitingEntity(), e.getIgnitingBlock());
+					BlockFireIgniteEvent event = new BlockFireIgniteEvent(e.getBlock(), e.getIgnitingEntity(), e.getIgnitingBlock());
 					Bukkit.getPluginManager().callEvent(event);
 					if(event.willBlock())
 						e.setCancelled(true);

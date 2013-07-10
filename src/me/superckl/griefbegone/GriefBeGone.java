@@ -32,4 +32,5 @@ public class GriefBeGone extends JavaPlugin{
 	public static GriefBeGone getInstance(){
 		return instance;
 	}
+	//TODO Block messages
 }

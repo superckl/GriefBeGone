@@ -4,15 +4,15 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import me.superckl.griefbegone.ActionHandler;
-import me.superckl.griefbegone.events.GriefBeGoneDeletableEvent;
+import me.superckl.griefbegone.events.DeletableEvent;
 
-public class GriefBeGoneBlockBlockPlaceEvent extends GriefBeGoneDeletableEvent{
+public class BlockBlockPlaceEvent extends DeletableEvent{
 
 	private Player player;
 	private Block blockPlaced;
 	private Block placedAgainst;
 	
-	public GriefBeGoneBlockBlockPlaceEvent(boolean delete, Block blockPlaced, Block placedAgainst, Player player){
+	public BlockBlockPlaceEvent(boolean delete, Block blockPlaced, Block placedAgainst, Player player){
 		super(ActionHandler.PLACE, delete);
 		this.placedAgainst = placedAgainst;
 		this.player = player;

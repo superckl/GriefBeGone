@@ -2,11 +2,11 @@ package me.superckl.griefbegone.events;
 
 import me.superckl.griefbegone.ActionHandler;
 
-public abstract class GriefBeGoneDeletableEvent extends GriefBeGoneBlockableEvent{
+public abstract class DeletableEvent extends BlockableEvent{
 
 	private boolean willDelete;
 	
-	public GriefBeGoneDeletableEvent(ActionHandler action, boolean delete){
+	public DeletableEvent(ActionHandler action, boolean delete){
 		super(action);
 		this.willDelete = delete;
 	}

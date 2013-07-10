@@ -1,18 +1,18 @@
 package me.superckl.griefbegone.events.blocks;
 
 import me.superckl.griefbegone.ActionHandler;
-import me.superckl.griefbegone.events.GriefBeGoneDeletableEvent;
+import me.superckl.griefbegone.events.DeletableEvent;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class GriefBeGoneBlockBlockBreakEvent extends GriefBeGoneDeletableEvent{
+public class BlockBlockBreakEvent extends DeletableEvent{
 
 	private Player player;
 	private Block blockBroken;
 	private int exp;
 	
-	public GriefBeGoneBlockBlockBreakEvent(boolean delete, Block blockBroken, Player player, int exp){
+	public BlockBlockBreakEvent(boolean delete, Block blockBroken, Player player, int exp){
 		super(ActionHandler.BREAK, delete);
 		this.player = player;
 		this.blockBroken = blockBroken;

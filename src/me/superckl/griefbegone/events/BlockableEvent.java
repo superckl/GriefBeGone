@@ -3,14 +3,14 @@ package me.superckl.griefbegone.events;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.superckl.griefbegone.MiscActionHandler;
+import me.superckl.griefbegone.ActionHandler;
 
-public abstract class GriefBeGoneBlockableMiscActionEvent extends Event{
+public abstract class BlockableEvent extends Event{
 
-	private MiscActionHandler action;
+	private ActionHandler action;
 	private boolean willBlock;
-	
-	public GriefBeGoneBlockableMiscActionEvent(MiscActionHandler action){
+
+	public BlockableEvent(ActionHandler action){
 		this.action = action;
 		this.willBlock = true;
 	}
@@ -24,14 +24,13 @@ public abstract class GriefBeGoneBlockableMiscActionEvent extends Event{
 	}
 	
 	
-	public MiscActionHandler getAction(){
+	public ActionHandler getAction(){
 		return this.action;
 	}
-
+	
 	@Override
 	public HandlerList getHandlers() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }
