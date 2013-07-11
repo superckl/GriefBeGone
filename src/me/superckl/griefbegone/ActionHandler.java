@@ -13,6 +13,7 @@ public enum ActionHandler {
 	INTERACT_HAND("interacthand"),
 	INTERACT_WORLD("interactworld"),
 	DROP("drop"),
+	DISPENSE("dispense"),
 	PICK_UP("pickup"),
 	INVENTORY("inventory");
 	
@@ -36,9 +37,11 @@ public enum ActionHandler {
 		
 		if(this.hasBypassPerm(player, id, data, worldname)) 
 			return boolArray;
-		Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(this);
-		boolean containsID = disables.containsKey(id); boolean containsData = disables.containsKey(data);
-		if(disables == null || !containsID || !containsData)
+		Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(this).get(worldname);
+		if(disables == null)
+			return boolArray;
+		boolean containsID = disables.containsKey(id) || disables.containsKey("*"); boolean containsData = disables.containsKey(data) || disables.containsKey("*");
+		if(!containsID || !containsData)
 			return boolArray;
 		boolArray[0] = true;
 		if(this.hasDeleteBypassPerm(player, id, data, worldname))
@@ -72,9 +75,35 @@ public enum ActionHandler {
 			return true;
 		return false;
 	}
+	public static boolean[] shouldBlockAndDeleteDispense(final ItemStack i, String worldname){
+		boolean[] boolArray = new boolean[] {false, false};
+		if (i == null)
+			return boolArray;
+		if(i.getTypeId() == 0)
+			return boolArray;
+		final String id = Integer.toString(i.getTypeId());
+		final String data = new StringBuilder(i.getTypeId()).append(":")
+				.append(i.getData().getData()).toString();
+		Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(ActionHandler.DISPENSE).get(worldname);
+		if(disables == null)
+			return boolArray;
+		boolean containsID = disables.containsKey(id) || disables.containsKey("*"); boolean containsData = disables.containsKey(data) || disables.containsKey("*");
+		if(!containsID || !containsData)
+			return boolArray;
+		boolArray[0] = true;
+		if(containsID)
+			boolArray[1] = disables.get(id);
+		else
+			boolArray[1] = disables.get(data);
+		return boolArray;
+	}
 	
+	public String getMessage(){
+		return GriefBeGone.getInstance().getMessage(this);
+	}
 	public String getPerm(){
 		return this.perm;
 	}
+	
 	
 }

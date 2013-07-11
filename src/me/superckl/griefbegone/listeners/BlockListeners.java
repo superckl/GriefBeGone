@@ -9,6 +9,8 @@ import me.superckl.griefbegone.events.blocks.BlockFireIgniteEvent;
 import me.superckl.griefbegone.events.blocks.BlockFireSpreadEvent;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -33,16 +35,23 @@ public class BlockListeners implements Listener{
 			if(this.events){
 				BlockBlockPlaceEvent event = new BlockBlockPlaceEvent(boolArray[1], e.getBlockPlaced(), e.getBlockAgainst(), e.getPlayer());
 				Bukkit.getPluginManager().callEvent(event);
-				if(event.willBlock()){
-					e.setCancelled(true);
-					if(event.willDelete())
-						e.getPlayer().setItemInHand(GriefBeGone.emptyItemStack);
+				if(!event.willBlock()){
+					return;
 				}
-			}else{
-				e.setCancelled(true);
-				if(boolArray[1])
-					e.getPlayer().setItemInHand(GriefBeGone.emptyItemStack);
+					boolArray[1] = event.willDelete();
 			}
+			e.setCancelled(true);
+			String message = ActionHandler.PLACE.getMessage();
+			if(message != null)
+				e.getPlayer().sendMessage(message);
+			message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to place ").append(e.getBlockPlaced().getType().toString()).toString();
+			GriefBeGone.getInstance().getLogger().info(message);
+			for(Player player:Bukkit.getOnlinePlayers())
+				if(player.hasPermission("disabler.broadcast."+ActionHandler.PLACE.getPerm()))
+					player.sendMessage(message);
+			if(boolArray[1])
+				e.getPlayer().setItemInHand(GriefBeGone.emptyItemStack);
+			
 		}
 	}
 	
@@ -53,22 +62,29 @@ public class BlockListeners implements Listener{
 			if(this.events){
 				BlockBlockBreakEvent event = new BlockBlockBreakEvent(boolArray[1], e.getBlock(), e.getPlayer(), e.getExpToDrop());
 				Bukkit.getPluginManager().callEvent(event);
-				if(event.willBlock()){
-					e.setCancelled(true);
-					if(event.willDelete())
-						e.getBlock().setTypeId(0);
+				if(!event.willBlock()){
+					return;
 				}
-			}else{
+					boolArray[1] = event.willDelete();
+			}
 				e.setCancelled(true);
+				String message = ActionHandler.BREAK.getMessage();
+				if(message != null)
+					e.getPlayer().sendMessage(message);
+				message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to break ").append(e.getBlock().getType().toString()).toString();
+				GriefBeGone.getInstance().getLogger().info(message);
+				for(Player player:Bukkit.getOnlinePlayers())
+					if(player.hasPermission("disabler.broadcast."+ActionHandler.BREAK.getPerm()))
+						player.sendMessage(message);
 				if(boolArray[1])
 					e.getBlock().setTypeId(0);
-			}
+			
 		}
 	}
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockIgnite(BlockIgniteEvent e){
 		if(e.getCause() == IgniteCause.SPREAD){
-			if(MiscActionHandler.FIRE_SPREAD.getWorlds().contains(e.getBlock().getWorld().getName())){
+			if(MiscActionHandler.FIRE_SPREAD.getDisabled(e.getBlock().getWorld().getName()) != null){
 				if(this.events){
 					BlockFireSpreadEvent event = new BlockFireSpreadEvent(e.getBlock());
 					Bukkit.getPluginManager().callEvent(event);
@@ -78,17 +94,27 @@ public class BlockListeners implements Listener{
 					e.setCancelled(true);
 			}
 		}else{
-			boolean block = MiscActionHandler.FIRE_IGNITE.getWorlds().contains(e.getBlock().getWorld().getName());
+			boolean block = MiscActionHandler.FIRE_IGNITE.getDisabled(e.getBlock().getWorld().getName()) != null;
 			if(e.getPlayer() != null && block)
 				block = MiscActionHandler.shouldBlockFirePlace(e.getPlayer(), e.getPlayer().getWorld());
 			if(block){
 				if(this.events){
 					BlockFireIgniteEvent event = new BlockFireIgniteEvent(e.getBlock(), e.getIgnitingEntity(), e.getIgnitingBlock());
 					Bukkit.getPluginManager().callEvent(event);
-					if(event.willBlock())
-						e.setCancelled(true);
-				}else
+					if(!event.willBlock()){
+						return;
+					}
+				}
 					e.setCancelled(true);
+					if(e.getPlayer() == null) return;
+					String message = MiscActionHandler.FIRE_IGNITE.getMessage();
+					if(message != null)
+					e.getPlayer().sendMessage(message);
+					message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to light fire to ").append(e.getBlock().getType().toString()).toString();
+					GriefBeGone.getInstance().getLogger().info(message);
+					for(Player player:Bukkit.getOnlinePlayers())
+						if(player.hasPermission("disabler.broadcast."+MiscActionHandler.FIRE_IGNITE.getKey()))
+							player.sendMessage(message);
 			}
 		}
 	}
