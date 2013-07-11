@@ -1,18 +1,18 @@
 package me.superckl.griefbegone.events.blocks;
 
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-
 import me.superckl.griefbegone.MiscActionHandler;
 import me.superckl.griefbegone.events.BlockableMiscActionEvent;
 
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+
 public class BlockFireIgniteEvent extends BlockableMiscActionEvent{
 
-	private Block ignited;
-	private Entity igniterEntity;
-	private Block igniterBlock;
-	
-	public BlockFireIgniteEvent(Block ignited, Entity igniterEntity, Block igniterBlock) {
+	private final Block ignited;
+	private final Entity igniterEntity;
+	private final Block igniterBlock;
+
+	public BlockFireIgniteEvent(final Block ignited, final Entity igniterEntity, final Block igniterBlock) {
 		super(MiscActionHandler.FIRE_IGNITE);
 		this.ignited = ignited;
 		this.igniterEntity = igniterEntity;
@@ -26,7 +26,7 @@ public class BlockFireIgniteEvent extends BlockableMiscActionEvent{
 	public Entity getIgniterEntity(){
 		return this.igniterEntity;
 	}
-	
+
 	public Block getIgniterBlock(){
 		return this.igniterBlock;
 	}

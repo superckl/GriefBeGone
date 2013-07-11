@@ -16,15 +16,15 @@ public enum ActionHandler {
 	DISPENSE("dispense"),
 	PICK_UP("pickup"),
 	INVENTORY("inventory");
-	
+
 	private String perm;
-	
-	private ActionHandler(String perm){
+
+	private ActionHandler(final String perm){
 		this.perm = perm;
 	}
-	
+
 	public boolean[] shouldBlockAndDelete(final HumanEntity player, final ItemStack i){
-		boolean[] boolArray = new boolean[] {false, false};
+		final boolean[] boolArray = new boolean[] {false, false};
 		if (i == null)
 			return boolArray;
 		if(i.getTypeId() == 0)
@@ -34,13 +34,13 @@ public enum ActionHandler {
 		final String id = Integer.toString(i.getTypeId());
 		final String data = new StringBuilder(i.getTypeId()).append(":")
 				.append(i.getData().getData()).toString();
-		
-		if(this.hasBypassPerm(player, id, data, worldname)) 
+
+		if(this.hasBypassPerm(player, id, data, worldname))
 			return boolArray;
-		Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(this).get(worldname);
+		final Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(this).get(worldname);
 		if(disables == null)
 			return boolArray;
-		boolean containsID = disables.containsKey(id) || disables.containsKey("*"); boolean containsData = disables.containsKey(data) || disables.containsKey("*");
+		final boolean containsID = disables.containsKey(id) || disables.containsKey("*"); final boolean containsData = disables.containsKey(data) || disables.containsKey("*");
 		if(!containsID || !containsData)
 			return boolArray;
 		boolArray[0] = true;
@@ -67,16 +67,16 @@ public enum ActionHandler {
 		return false;
 	}
 	private boolean hasDeleteBypassPerm(final HumanEntity player, final String id, final String data, final String worldname){
-		String permbase = "disabler.bypass.delete."+worldname+".";
-		String permid = permbase.concat(id);
-		String permdata = permbase.concat(data);
-		String permevery = permbase.concat("*");
+		final String permbase = "disabler.bypass.delete."+worldname+".";
+		final String permid = permbase.concat(id);
+		final String permdata = permbase.concat(data);
+		final String permevery = permbase.concat("*");
 		if (player.hasPermission(permid) || player.hasPermission(permdata) || player.hasPermission(permevery))
 			return true;
 		return false;
 	}
-	public static boolean[] shouldBlockAndDeleteDispense(final ItemStack i, String worldname){
-		boolean[] boolArray = new boolean[] {false, false};
+	public static boolean[] shouldBlockAndDeleteDispense(final ItemStack i, final String worldname){
+		final boolean[] boolArray = new boolean[] {false, false};
 		if (i == null)
 			return boolArray;
 		if(i.getTypeId() == 0)
@@ -84,10 +84,10 @@ public enum ActionHandler {
 		final String id = Integer.toString(i.getTypeId());
 		final String data = new StringBuilder(i.getTypeId()).append(":")
 				.append(i.getData().getData()).toString();
-		Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(ActionHandler.DISPENSE).get(worldname);
+		final Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(ActionHandler.DISPENSE).get(worldname);
 		if(disables == null)
 			return boolArray;
-		boolean containsID = disables.containsKey(id) || disables.containsKey("*"); boolean containsData = disables.containsKey(data) || disables.containsKey("*");
+		final boolean containsID = disables.containsKey(id) || disables.containsKey("*"); final boolean containsData = disables.containsKey(data) || disables.containsKey("*");
 		if(!containsID || !containsData)
 			return boolArray;
 		boolArray[0] = true;
@@ -97,13 +97,13 @@ public enum ActionHandler {
 			boolArray[1] = disables.get(data);
 		return boolArray;
 	}
-	
+
 	public String getMessage(){
 		return GriefBeGone.getInstance().getMessage(this);
 	}
 	public String getPerm(){
 		return this.perm;
 	}
-	
-	
+
+
 }

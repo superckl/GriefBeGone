@@ -9,9 +9,9 @@ import org.bukkit.entity.Fireball;
 
 public class BlockFireballExplodeEvent extends BlockEntityExplodeEvent{
 
-	private Fireball fireball;
-	
-	public BlockFireballExplodeEvent(List<Block> blocklist, Fireball fireball) {
+	private final Fireball fireball;
+
+	public BlockFireballExplodeEvent(final List<Block> blocklist, final Fireball fireball) {
 		super(MiscActionHandler.FIREBALL, blocklist);
 		this.fireball = fireball;
 	}

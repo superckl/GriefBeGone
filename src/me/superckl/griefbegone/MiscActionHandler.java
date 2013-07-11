@@ -15,24 +15,24 @@ public enum MiscActionHandler {
 	FIREBALL("fireball"),
 	FIRE_IGNITE("fireignite"),
 	FIRE_SPREAD("firespread");
-	
+
 	private String key;
-	
-	private MiscActionHandler(String key){
+
+	private MiscActionHandler(final String key){
 		this.key = key;
 	}
-	
-	public List<String> getDisabled(String worldName){
+
+	public List<String> getDisabled(final String worldName){
 		return GriefBeGone.getInstance().getMiscActionMap(this).get(worldName);
 	}
-	
+
 	public String getKey(){
 		return this.key;
 	}
 	public String getMessage(){
 		return GriefBeGone.getInstance().getMessage(this);
 	}
-	public static boolean shouldBlockFirePlace(Player player, World world){
+	public static boolean shouldBlockFirePlace(final Player player, final World world){
 		return !(player.hasPermission("disabler.bypass.all."+world.getName()) || player.hasPermission("player.bypass.fireplace."+world.getName()));
 	}
 }

@@ -2,16 +2,16 @@ package me.superckl.griefbegone.events.world;
 
 import java.util.List;
 
+import me.superckl.griefbegone.MiscActionHandler;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Creeper;
 
-import me.superckl.griefbegone.MiscActionHandler;
-
 public class BlockCreeperExplodeEvent extends BlockEntityExplodeEvent{
 
-	private Creeper creeper;
-	
-	public BlockCreeperExplodeEvent(List<Block> blocklist, Creeper creeper) {
+	private final Creeper creeper;
+
+	public BlockCreeperExplodeEvent(final List<Block> blocklist, final Creeper creeper) {
 		super(MiscActionHandler.CREEPER, blocklist);
 		this.creeper = creeper;
 	}
@@ -19,5 +19,5 @@ public class BlockCreeperExplodeEvent extends BlockEntityExplodeEvent{
 	public Creeper getCreeper(){
 		return this.creeper;
 	}
-	
+
 }

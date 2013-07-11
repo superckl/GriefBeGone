@@ -13,31 +13,30 @@ public class GriefBeGone extends JavaPlugin{
 
 	static GriefBeGone instance;
 	public static final ItemStack emptyItemStack = new ItemStack(0,0);
-	private Map<String, Map<String, Map<String, Boolean>>> disables = new HashMap<String, Map<String, Map<String, Boolean>>>();
-	private Map<String, Map<String, List<String>>> miscDisables = new HashMap<String, Map<String, List<String>>>();
-	private Map<String, String> messages = new HashMap<String, String>();
-	
+	private final Map<String, Map<String, Map<String, Boolean>>> disables = new HashMap<String, Map<String, Map<String, Boolean>>>();
+	private final Map<String, Map<String, List<String>>> miscDisables = new HashMap<String, Map<String, List<String>>>();
+	private final Map<String, String> messages = new HashMap<String, String>();
+
 	@Override
 	public void onEnable(){
-		instance = this;
+		GriefBeGone.instance = this;
 		this.saveDefaultConfig();
 		this.getServer().getPluginManager().registerEvents(new BlockListeners(false), this);
 	}
 
-	public Map<String, Map<String, Boolean>> getActionMap(ActionHandler action){
+	public Map<String, Map<String, Boolean>> getActionMap(final ActionHandler action){
 		return this.disables.get(action.getPerm());
 	}
-	public Map<String, List<String>> getMiscActionMap(MiscActionHandler action){
-		return this.miscDisables.get(action.getKey());//TODO
+	public Map<String, List<String>> getMiscActionMap(final MiscActionHandler action){
+		return this.miscDisables.get(action.getKey());
 	}
-	public String getMessage(ActionHandler action){
+	public String getMessage(final ActionHandler action){
 		return this.messages.get(action.getPerm());
 	}
-	public String getMessage(MiscActionHandler action){
+	public String getMessage(final MiscActionHandler action){
 		return this.messages.get(action.getKey());
 	}
 	public static GriefBeGone getInstance(){
-		return instance;
+		return GriefBeGone.instance;
 	}
-	//TODO Block messages
 }

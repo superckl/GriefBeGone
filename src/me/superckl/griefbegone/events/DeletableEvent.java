@@ -5,17 +5,17 @@ import me.superckl.griefbegone.ActionHandler;
 public abstract class DeletableEvent extends BlockableEvent{
 
 	private boolean willDelete;
-	
-	public DeletableEvent(ActionHandler action, boolean delete){
+
+	public DeletableEvent(final ActionHandler action, final boolean delete){
 		super(action);
 		this.willDelete = delete;
 	}
 
 	public boolean willDelete() {
-		return willDelete;
+		return this.willDelete;
 	}
 
-	public void setWillDelete(boolean willDelete) {
+	public void setWillDelete(final boolean willDelete) {
 		this.willDelete = willDelete;
 	}
 

@@ -9,9 +9,9 @@ import org.bukkit.entity.TNTPrimed;
 
 public class BlockTnTExplodeEvent extends BlockEntityExplodeEvent{
 
-	private TNTPrimed tnt;
-	
-	public BlockTnTExplodeEvent(List<Block> blocklist, TNTPrimed tnt) {
+	private final TNTPrimed tnt;
+
+	public BlockTnTExplodeEvent(final List<Block> blocklist, final TNTPrimed tnt) {
 		super(MiscActionHandler.TNT, blocklist);
 		this.tnt = tnt;
 	}

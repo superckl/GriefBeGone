@@ -1,29 +1,29 @@
 package me.superckl.griefbegone.events;
 
+import me.superckl.griefbegone.MiscActionHandler;
+
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import me.superckl.griefbegone.MiscActionHandler;
-
 public abstract class BlockableMiscActionEvent extends Event{
 
-	private MiscActionHandler action;
+	private final MiscActionHandler action;
 	private boolean willBlock;
-	
-	public BlockableMiscActionEvent(MiscActionHandler action){
+
+	public BlockableMiscActionEvent(final MiscActionHandler action){
 		this.action = action;
 		this.willBlock = true;
 	}
-	
+
 	public boolean willBlock() {
-		return willBlock;
+		return this.willBlock;
 	}
 
-	public void setWillBlock(boolean willBlock) {
+	public void setWillBlock(final boolean willBlock) {
 		this.willBlock = willBlock;
 	}
-	
-	
+
+
 	public MiscActionHandler getAction(){
 		return this.action;
 	}
@@ -33,5 +33,5 @@ public abstract class BlockableMiscActionEvent extends Event{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }
