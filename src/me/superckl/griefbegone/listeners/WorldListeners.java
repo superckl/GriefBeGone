@@ -34,9 +34,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class WorldListeners implements Listener{
 
-	private final boolean events;
+	private boolean events;
 
 	public WorldListeners(final boolean events){
+		this.events = events;
+	}
+	
+	public void setEvents(boolean events){
 		this.events = events;
 	}
 

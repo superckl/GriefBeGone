@@ -22,12 +22,16 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockListeners implements Listener{
 
-	private final boolean events;//TODO
+	private boolean events;
 
 	public BlockListeners(final boolean events){
 		this.events = events;
 	}
 
+	public void setEvents(boolean events){
+		this.events = events;
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(final BlockPlaceEvent e){
 		final boolean[] boolArray = ActionHandler.PLACE.shouldBlockAndDelete(e.getPlayer(), e.getItemInHand());

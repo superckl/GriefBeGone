@@ -25,12 +25,16 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerListeners implements Listener{
 
-	private final boolean events;
+	private boolean events;
 
 	public PlayerListeners(final boolean events){
 		this.events = events;
 	}
 
+	public void setEvents(boolean events){
+		this.events = events;
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerDrop(final PlayerDropItemEvent e){
 		final boolean[] boolArray = ActionHandler.DROP.shouldBlockAndDelete(e.getPlayer(), e.getItemDrop().getItemStack());

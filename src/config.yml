@@ -1,1 +1,4 @@
 Fire Events: false
+Disable Crafting:
+  World:
+    - 123:45:true
