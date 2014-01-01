@@ -1,4 +1,48 @@
 Fire Events: false
 Disable Crafting:
-  World:
-    - 123:45:true
+  World123:
+    - 123:45:false
+Disable Placing:
+  World123:
+    - 123:45:false
+Disable Breaking:
+  World123:
+    - 123:45:false
+Disable Interacting With Item In Hand:
+  World123:
+    - 123:45:false
+Disable Interacting With Block:
+  World123:
+    - 123:45:false
+Disable Dropping:
+  World123:
+    - 123:45:false
+Disable Dispensing:
+  World123:
+    - 123:45:false
+Disable Entity Spawning:
+  World123:
+    - EntityName
+Disable Item Spawning:
+  World123:
+    - 123:45
+Disable Brewing:
+  World123:
+    - 123:45
+Disable Picking Up:
+  World123:
+    - 123:45:false
+Disable Clicking Item In Inventories:
+  World123:
+    - 123:45:false
+Disable Creeper Explosions:
+  - World123
+Disable TNT Explosions:
+  - World123
+Disable Fireball Explosions:
+  - World123
+Disable Fire Ignition:
+  - World123
+Disable Fire Spread:
+  - World123
+#Messages

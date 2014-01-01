@@ -2,6 +2,7 @@ package me.superckl.griefbegone;
 
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,7 +18,7 @@ public enum ActionHandler {
 	PICK_UP("pickup"),
 	INVENTORY("inventory");
 
-	private String perm;
+	private final String perm;
 
 	private ActionHandler(final String perm){
 		this.perm = perm;
@@ -27,21 +28,20 @@ public enum ActionHandler {
 		final boolean[] boolArray = new boolean[] {false, false};
 		if (i == null)
 			return boolArray;
-		if(i.getTypeId() == 0)
+		if(i.getType() == Material.AIR)
 			return boolArray;
 		if(player == null) return boolArray;
 		final String worldname = player.getWorld().getName();
 		final String id = Integer.toString(i.getTypeId());
 		final String data = new StringBuilder(i.getTypeId()).append(":")
 				.append(i.getData().getData()).toString();
-
 		if(this.hasBypassPerm(player, id, data, worldname))
 			return boolArray;
 		final Map<String, Boolean> disables = GriefBeGone.getInstance().getActionMap(this).get(worldname);
 		if(disables == null)
 			return boolArray;
 		final boolean containsID = disables.containsKey(id) || disables.containsKey("*"); final boolean containsData = disables.containsKey(data) || disables.containsKey("*");
-		if(!containsID || !containsData)
+		if(!containsID && !containsData)
 			return boolArray;
 		boolArray[0] = true;
 		if(this.hasDeleteBypassPerm(player, id, data, worldname))
@@ -79,7 +79,7 @@ public enum ActionHandler {
 		final boolean[] boolArray = new boolean[] {false, false};
 		if (i == null)
 			return boolArray;
-		if(i.getTypeId() == 0)
+		if(i.getType() == Material.AIR)
 			return boolArray;
 		final String id = Integer.toString(i.getTypeId());
 		final String data = new StringBuilder(i.getTypeId()).append(":")

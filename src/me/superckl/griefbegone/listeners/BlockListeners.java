@@ -10,6 +10,7 @@ import me.superckl.griefbegone.events.blocks.BlockFireSpreadEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,10 +29,10 @@ public class BlockListeners implements Listener{
 		this.events = events;
 	}
 
-	public void setEvents(boolean events){
+	public void setEvents(final boolean events){
 		this.events = events;
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(final BlockPlaceEvent e){
 		final boolean[] boolArray = ActionHandler.PLACE.shouldBlockAndDelete(e.getPlayer(), e.getItemInHand());
@@ -60,7 +61,7 @@ public class BlockListeners implements Listener{
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(final BlockBreakEvent e){
-		final boolean[] boolArray = ActionHandler.BREAK.shouldBlockAndDelete(e.getPlayer(), new ItemStack(e.getBlock().getTypeId()));
+		final boolean[] boolArray = ActionHandler.BREAK.shouldBlockAndDelete(e.getPlayer(), new ItemStack(e.getBlock().getType()));
 		if(boolArray[0]){
 			if(this.events){
 				final BlockBlockBreakEvent event = new BlockBlockBreakEvent(boolArray[1], e.getBlock(), e.getPlayer(), e.getExpToDrop());
@@ -79,7 +80,7 @@ public class BlockListeners implements Listener{
 				if(player.hasPermission("disabler.broadcast."+ActionHandler.BREAK.getPerm()))
 					player.sendMessage(message);
 			if(boolArray[1])
-				e.getBlock().setTypeId(0);
+				e.getBlock().setType(Material.AIR);
 
 		}
 	}
@@ -96,7 +97,7 @@ public class BlockListeners implements Listener{
 					e.setCancelled(true);
 		}else{
 			boolean block = MiscActionHandler.FIRE_IGNITE.getDisabled(e.getBlock().getWorld().getName()) != null;
-			if(e.getPlayer() != null && block)
+			if((e.getPlayer() != null) && block)
 				block = MiscActionHandler.shouldBlockFirePlace(e.getPlayer(), e.getPlayer().getWorld());
 			if(block){
 				if(this.events){
@@ -110,7 +111,7 @@ public class BlockListeners implements Listener{
 				String message = MiscActionHandler.FIRE_IGNITE.getMessage();
 				if(message != null)
 					e.getPlayer().sendMessage(message);
-				message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to light fire to ").append(e.getBlock().getType().toString()).toString();
+				message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to light a fire at x:").append(e.getBlock().getX()).append(" y:").append(e.getBlock().getY()).append(" z:").append(e.getBlock().getZ()).toString();
 				GriefBeGone.getInstance().getLogger().info(message);
 				for(final Player player:Bukkit.getOnlinePlayers())
 					if(player.hasPermission("disabler.broadcast."+MiscActionHandler.FIRE_IGNITE.getKey()))

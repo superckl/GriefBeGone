@@ -39,8 +39,8 @@ public class WorldListeners implements Listener{
 	public WorldListeners(final boolean events){
 		this.events = events;
 	}
-	
-	public void setEvents(boolean events){
+
+	public void setEvents(final boolean events){
 		this.events = events;
 	}
 
@@ -49,7 +49,7 @@ public class WorldListeners implements Listener{
 		final List<String> disabled = MiscActionHandler.ITEM_SPAWN.getDisabled(e.getEntity().getWorld().getName());
 		final String id = Integer.toString(e.getEntity().getItemStack().getTypeId());
 		final String data = new StringBuilder(id).append(":").append(e.getEntity().getItemStack().getData().getData()).toString();
-		final boolean block = disabled.contains(id) || disabled.contains(data) || disabled.contains("*");
+		final boolean block = disabled == null ? false:disabled.contains(id) || disabled.contains(data) || disabled.contains("*");
 		if(block){
 			if(this.events){
 				final BlockItemSpawnEvent event = new BlockItemSpawnEvent(e.getEntity());
@@ -72,7 +72,8 @@ public class WorldListeners implements Listener{
 	public void onEntitySpawn(final CreatureSpawnEvent e){
 		String name = e.getEntity().getClass().getSimpleName();
 		if(name.startsWith("Craft")) name = name.substring(5);
-		final boolean block = MiscActionHandler.ENTITY_SPAWN.getDisabled(e.getLocation().getWorld().getName()).contains(name);
+		List<String> list = MiscActionHandler.ENTITY_SPAWN.getDisabled(e.getLocation().getWorld().getName());
+		final boolean block = list == null ? false:list.contains(name);
 		if(block){
 			if(this.events){
 				final BlockCreatureSpawnEvent event = new BlockCreatureSpawnEvent(e.getEntity());
@@ -103,12 +104,12 @@ public class WorldListeners implements Listener{
 				boolArray[1] = event.willDelete();
 			}
 			e.setCancelled(true);
-			if(boolArray[1] && e.getBlock() instanceof InventoryHolder)
+			if(boolArray[1] && (e.getBlock() instanceof InventoryHolder))
 				new BukkitRunnable(){
 				@Override
 				public void run() {
 					final InventoryHolder block = (InventoryHolder) e.getBlock();
-					block.getInventory().remove(e.getItem().getTypeId());
+					block.getInventory().remove(e.getItem().getType());
 					final String message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone]").append(" An illegal item was dispensed: ")
 							.append(e.getItem().getType().toString()).append(" at x:").append(e.getBlock().getLocation().getBlockX()).append(" y:")
 							.append(e.getBlock().getLocation().getBlockY()).append(" z:").append(e.getBlock().getLocation().getBlockZ()).toString();
@@ -129,10 +130,12 @@ public class WorldListeners implements Listener{
 		final BrewingStand stand = e.getContents().getHolder();
 		final String worldName = e.getBlock().getWorld().getName();
 		final List<String> disabled = MiscActionHandler.BREW.getDisabled(worldName);
+		if(disabled == null)
+			return;
 		new BukkitRunnable(){
 			@Override
 			public void run() {
-				if(e.getBlock().getTypeId() != stand.getTypeId())
+				if(e.getBlock().getType() != stand.getType())
 					return;
 				for(final ItemStack item:stand.getInventory().getContents()){
 					final String id = Integer.toString(item.getTypeId());
@@ -170,6 +173,7 @@ public class WorldListeners implements Listener{
 						return;
 				}
 				e.blockList().clear();
+				e.setCancelled(true);
 				final String message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone]").append(" A creeper exploded at x:").append(" at x:")
 						.append(e.getLocation().getBlockX()).append(" y:").append(e.getLocation().getBlockY()).append(" z:").append(e.getLocation().getBlockZ())
 						.toString();
@@ -188,6 +192,7 @@ public class WorldListeners implements Listener{
 						return;
 				}
 				e.blockList().clear();
+				e.setCancelled(true);
 				final String message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone]").append(" A fireball exploded at x:").append(" at x:")
 						.append(e.getLocation().getBlockX()).append(" y:").append(e.getLocation().getBlockY()).append(" z:").append(e.getLocation().getBlockZ())
 						.toString();
@@ -206,6 +211,7 @@ public class WorldListeners implements Listener{
 						return;
 				}
 				e.blockList().clear();
+				e.setCancelled(true);
 				final String message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone]").append(" TnT exploded at x:").append(" at x:")
 						.append(e.getLocation().getBlockX()).append(" y:").append(e.getLocation().getBlockY()).append(" z:").append(e.getLocation().getBlockZ())
 						.toString();

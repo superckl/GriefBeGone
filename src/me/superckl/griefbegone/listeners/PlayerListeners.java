@@ -11,6 +11,7 @@ import me.superckl.griefbegone.events.player.BlockItemPickupEvent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
@@ -31,10 +32,10 @@ public class PlayerListeners implements Listener{
 		this.events = events;
 	}
 
-	public void setEvents(boolean events){
+	public void setEvents(final boolean events){
 		this.events = events;
 	}
-	
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerDrop(final PlayerDropItemEvent e){
 		final boolean[] boolArray = ActionHandler.DROP.shouldBlockAndDelete(e.getPlayer(), e.getItemDrop().getItemStack());
@@ -49,7 +50,7 @@ public class PlayerListeners implements Listener{
 			String message = ActionHandler.DROP.getMessage();
 			if(message != null)
 				e.getPlayer().sendMessage(message);
-			message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to drop ").append(e.getItemDrop().getType().toString()).toString();
+			message = new StringBuilder().append(ChatColor.RED).append("[GriefBeGone] ").append(e.getPlayer().getName()).append(" tried to drop ").append(e.getItemDrop().getItemStack().getType().toString()).toString();
 			GriefBeGone.getInstance().getLogger().info(message);
 			for(final Player player:Bukkit.getOnlinePlayers())
 				if(player.hasPermission("disabler.broadcast."+ActionHandler.DROP.getPerm()))
@@ -91,8 +92,8 @@ public class PlayerListeners implements Listener{
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteract(final PlayerInteractEvent e){
-		if(e.getClickedBlock() != null && e.getClickedBlock().getTypeId() != 0){
-			final boolean[] boolArray = ActionHandler.INTERACT_WORLD.shouldBlockAndDelete(e.getPlayer(), new ItemStack(e.getClickedBlock().getTypeId()));
+		if((e.getClickedBlock() != null) && (e.getClickedBlock().getType() != Material.AIR)){
+			final boolean[] boolArray = ActionHandler.INTERACT_WORLD.shouldBlockAndDelete(e.getPlayer(), new ItemStack(e.getClickedBlock().getType()));
 			if(boolArray[0])
 				if(this.events){
 					final BlockInteractWorldEvent event = new BlockInteractWorldEvent(boolArray[1], e.getPlayer(), e.getClickedBlock());
@@ -108,7 +109,7 @@ public class PlayerListeners implements Listener{
 							if(player.hasPermission("disabler.broadcast."+ActionHandler.INTERACT_WORLD.getPerm()))
 								player.sendMessage(message);
 						if(event.willDelete())
-							e.getClickedBlock().setTypeId(0);
+							e.getClickedBlock().setType(Material.AIR);
 					}
 				}else{
 					e.setCancelled(true);
@@ -121,10 +122,10 @@ public class PlayerListeners implements Listener{
 						if(player.hasPermission("disabler.broadcast."+ActionHandler.INTERACT_WORLD.getPerm()))
 							player.sendMessage(message);
 					if(boolArray[1])
-						e.getClickedBlock().setTypeId(0);
+						e.getClickedBlock().setType(Material.AIR);
 				}
 		}
-		if(e.getItem() != null && e.getItem().getTypeId() != 0){
+		if((e.getItem() != null) && (e.getItem().getType() != Material.AIR)){
 			final boolean[] boolArray = ActionHandler.INTERACT_HAND.shouldBlockAndDelete(e.getPlayer(), e.getItem());
 			if(boolArray[0])
 				if(this.events){
@@ -144,14 +145,14 @@ public class PlayerListeners implements Listener{
 						if(player.hasPermission("disabler.broadcast."+ActionHandler.INTERACT_HAND.getPerm()))
 							player.sendMessage(message);
 					if(boolArray[1])
-						e.getItem().setTypeId(0);
+						e.getItem().setType(Material.AIR);
 				}
 		}
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInventoryClick(final InventoryClickEvent e){
-		if(e.getCurrentItem().getTypeId() == 0 && e.getCursor().getTypeId() == 0)
+		if((e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) && (e.getCursor() == null || e.getCursor().getType() == Material.AIR))
 			return;
 		final boolean[] cursorArray = ActionHandler.INVENTORY.shouldBlockAndDelete(e.getWhoClicked(), e.getCursor());
 		final boolean[] clickedArray = ActionHandler.INVENTORY.shouldBlockAndDelete(e.getWhoClicked(), e.getCurrentItem());

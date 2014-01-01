@@ -1,5 +1,6 @@
 package me.superckl.griefbegone;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.World;
@@ -16,7 +17,8 @@ public enum MiscActionHandler {
 	FIRE_IGNITE("fireignite"),
 	FIRE_SPREAD("firespread");
 
-	private String key;
+	static final List<String> emptyList = new ArrayList<String>(0);
+	private final String key;
 
 	private MiscActionHandler(final String key){
 		this.key = key;
